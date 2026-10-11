@@ -132,3 +132,79 @@ export const demoAdmin = {
   ],
   missingRegisters: ["Nursery 2", "JSS 1B", "SS 2A"],
 };
+
+export type ScoreEntry = { ca1: string; ca2: string; exam: string };
+
+// Scores typed so far for Primary 4A, 1st term. Blank means not yet entered.
+export const demoScoreSheet = {
+  className: demoRegister.className,
+  term: "1st term, 2026/2027 session",
+  subjects: ["Mathematics", "English Language", "Basic Science", "Verbal Reasoning"],
+  components: [
+    { key: "ca1", label: "CA1", max: 20 },
+    { key: "ca2", label: "CA2", max: 20 },
+    { key: "exam", label: "Exam", max: 60 },
+  ] as const,
+  initial: {
+    p1: { ca1: "18", ca2: "17", exam: "" },
+    p2: { ca1: "16", ca2: "15", exam: "" },
+    p3: { ca1: "12", ca2: "", exam: "" },
+    p4: { ca1: "19", ca2: "18", exam: "" },
+    p5: { ca1: "14", ca2: "16", exam: "" },
+  } as Partial<Record<string, ScoreEntry>>,
+};
+
+export const classNames = [
+  "Creche", "Nursery 1", "Nursery 2", "Primary 1", "Primary 2", "Primary 3", "Primary 4", "Primary 5",
+  "Primary 6", "JSS 1", "JSS 2", "JSS 3", "SS 1", "SS 2", "SS 3",
+] as const;
+
+export type Student = {
+  id: string;
+  admissionNo: string;
+  name: string;
+  className: (typeof classNames)[number];
+  gender: "F" | "M";
+  guardian: string;
+  phone: string;
+  balanceKobo: number;
+};
+
+const studentRows: [string, Student["className"], Student["gender"], string, string, number][] = [
+  ["Blessing Udo", "Creche", "F", "Mr. Udo", "0803 112 4567", 0],
+  ["Ife Ogunleye", "Nursery 2", "F", "Mrs. Ogunleye", "0806 234 9811", 11_000_000],
+  ["Kola Bamidele", "Nursery 1", "M", "Mrs. Bamidele", "0810 552 0193", 0],
+  ["Adaeze Okonkwo", "Primary 4", "F", "Mr. Okonkwo", "0802 778 3301", 0],
+  ["Tobi Adebayo", "Primary 4", "M", "Mrs. Adebayo", "0805 661 2290", 4_500_000],
+  ["Ibrahim Musa", "Primary 4", "M", "Alhaji Musa", "0809 341 7720", 2_000_000],
+  ["Samuel Ade", "Primary 6", "M", "Mrs. Ade", "0703 445 1180", 6_000_000],
+  ["Mary Johnson", "Primary 2", "F", "Mrs. Johnson", "0814 902 3346", 0],
+  ["Zainab Yusuf", "JSS 1", "F", "Mr. Yusuf", "0807 120 5598", 16_500_000],
+  ["Ayomide Adebayo", "JSS 2", "F", "Mrs. Adebayo", "0805 661 2290", 0],
+  ["Peter Okafor", "JSS 3", "M", "Mr. Okafor", "0802 330 7714", 0],
+  ["Emeka Obi", "SS 2", "M", "Mrs. Obi", "0806 991 2045", 9_000_000],
+  ["Halima Bello", "SS 1", "F", "Mr. Bello", "0813 207 6652", 0],
+  ["Tunde Fashola", "SS 3", "M", "Mrs. Fashola", "0708 664 3319", 3_500_000],
+];
+
+export const demoStudents: Student[] = studentRows.map(([name, className, gender, guardian, phone, balanceKobo], i) => ({
+  id: `s${i + 1}`,
+  admissionNo: `TGS/26/${String(i + 101).padStart(4, "0")}`,
+  name,
+  className,
+  gender,
+  guardian,
+  phone,
+  balanceKobo,
+}));
+
+// Sample per-class collection for the fees screen. Real amounts come from the school's fee schedule.
+export const demoFeesByClass: { className: string; pupils: number; billedKobo: number; collectedKobo: number }[] = [
+  { className: "Creche", pupils: 20, billedKobo: 190_000_000, collectedKobo: 150_000_000 },
+  { className: "Nursery 1", pupils: 30, billedKobo: 285_000_000, collectedKobo: 210_000_000 },
+  { className: "Nursery 2", pupils: 28, billedKobo: 266_000_000, collectedKobo: 170_000_000 },
+  { className: "Primary 1-3", pupils: 90, billedKobo: 990_000_000, collectedKobo: 700_000_000 },
+  { className: "Primary 4-6", pupils: 86, billedKobo: 946_000_000, collectedKobo: 640_000_000 },
+  { className: "JSS 1-3", pupils: 88, billedKobo: 1_144_000_000, collectedKobo: 760_000_000 },
+  { className: "SS 1-3", pupils: 70, billedKobo: 769_000_000, collectedKobo: 490_000_000 },
+];
