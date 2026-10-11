@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { demoSettings } from "@/lib/demo-data";
 import { defaultBands } from "@/lib/grading";
 
@@ -11,7 +11,11 @@ export function Settings() {
   const [saved, setSaved] = useState(false);
   const [splitError, setSplitError] = useState<string | null>(null);
 
-  function save(form: FormData) {
+  // A plain submit handler, not a form action: React resets a form's fields after an action runs,
+  // which would wipe what the user typed.
+  function save(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
     const total = ["CA1", "CA2", "Exam"].reduce((s, n) => s + Number(form.get(`max-${n}`)), 0);
     if (total !== 100) {
       setSplitError(`They add up to ${total}, not 100.`);
@@ -24,7 +28,7 @@ export function Settings() {
 
   return (
     <form
-      action={save}
+      onSubmit={save}
       onChange={() => setSaved(false)}
       className="flex flex-col gap-5"
       aria-label="School settings"
