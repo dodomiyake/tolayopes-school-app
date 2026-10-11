@@ -3,16 +3,37 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { demoChildren, type Child } from "@/lib/demo-data";
 
-type ChildState = { children: Child[]; child: Child; select: (id: string) => void };
+export type SentTeller = {
+  id: string;
+  amountKobo: number;
+  bank: string;
+  paidOn: string;
+  reference: string;
+  fileName: string;
+};
+
+type ChildState = {
+  children: Child[];
+  child: Child;
+  select: (id: string) => void;
+  tellers: SentTeller[];
+  addTeller: (t: Omit<SentTeller, "id">) => void;
+};
 
 const ChildContext = createContext<ChildState | null>(null);
 
 // Keeps the chosen child as the parent moves between Home, Fees and Results.
 export function ChildProvider({ children }: { children: ReactNode }) {
   const [selectedId, setSelectedId] = useState(demoChildren[0].id);
+  const [sent, setSent] = useState<Record<string, SentTeller[]>>({});
   const child = demoChildren.find((c) => c.id === selectedId) ?? demoChildren[0];
+  const tellers = sent[child.id] ?? [];
+  const addTeller = (t: Omit<SentTeller, "id">) =>
+    setSent((s) => ({ ...s, [child.id]: [{ ...t, id: `${child.id}-${tellers.length + 1}` }, ...tellers] }));
   return (
-    <ChildContext value={{ children: demoChildren, child, select: setSelectedId }}>{children}</ChildContext>
+    <ChildContext value={{ children: demoChildren, child, select: setSelectedId, tellers, addTeller }}>
+      {children}
+    </ChildContext>
   );
 }
 

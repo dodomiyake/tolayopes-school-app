@@ -65,9 +65,12 @@ export function ParentHome() {
             <div className="h-2 rounded-full bg-lime" style={{ width: `${paidPercent(billed, paid)}%` }} />
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <button className="h-12 rounded-xl bg-brand text-sm font-bold text-white hover:bg-brand-600">
+            <Link
+              href="/parent/fees/teller"
+              className="flex h-12 items-center justify-center rounded-xl bg-brand text-sm font-bold text-white hover:bg-brand-600"
+            >
               Upload bank teller
-            </button>
+            </Link>
             <Link
               href="/parent/fees"
               className="flex h-12 items-center justify-center rounded-xl border-[1.5px] border-line-strong text-sm font-semibold"

@@ -6,8 +6,12 @@ export default function SignInPage() {
   return (
     <div className="flex min-h-dvh flex-col lg:flex-row">
       <section className="flex flex-col items-center gap-3 rounded-b-[32px] bg-brand px-6 pt-12 pb-16 text-center lg:w-[44%] lg:justify-center lg:rounded-none lg:p-12">
-        <Crest size={104} className="lg:hidden" />
-        <Crest size={168} className="hidden lg:inline-flex" />
+        <span className="lg:hidden">
+          <Crest size={104} />
+        </span>
+        <span className="hidden lg:block">
+          <Crest size={168} />
+        </span>
         <h1 className="mt-2 text-[26px] font-extrabold tracking-wide text-white lg:mt-4 lg:text-4xl">
           {school.shortName.toUpperCase()}
         </h1>

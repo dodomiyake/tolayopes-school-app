@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { average, gradeFor, ordinal, positions, scoreError } from "./grading";
-import { formatNaira, formatNairaShort, paidPercent } from "./money";
+import { formatNaira, formatNairaShort, paidPercent, parseNairaToKobo } from "./money";
 
 describe("gradeFor", () => {
   it("maps totals onto the default bands", () => {
@@ -70,5 +70,19 @@ describe("scoreError", () => {
     expect(scoreError("-3", 20)).toBe("Use a whole number or .5");
     expect(scoreError("abc", 60)).toBe("Use a whole number or .5");
     expect(scoreError("12.3", 20)).toBe("Use a whole number or .5");
+  });
+});
+
+describe("parseNairaToKobo", () => {
+  it("reads amounts the way parents type them", () => {
+    expect(parseNairaToKobo("45,000")).toBe(4_500_000);
+    expect(parseNairaToKobo("₦ 45000")).toBe(4_500_000);
+    expect(parseNairaToKobo("1250.50")).toBe(125_050);
+  });
+  it("rejects blanks, zero and anything that is not an amount", () => {
+    expect(parseNairaToKobo("")).toBeNull();
+    expect(parseNairaToKobo("0")).toBeNull();
+    expect(parseNairaToKobo("-500")).toBeNull();
+    expect(parseNairaToKobo("45k")).toBeNull();
   });
 });
