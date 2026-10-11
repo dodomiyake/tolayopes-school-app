@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tolayope's Group of School app
 
-## Getting Started
+School app for Tolayope's Group of School, Abule Egba, Lagos. It serves parents, teachers and office staff, from Creche through SS 3.
 
-First, run the development server:
+Parents and teachers can use it on a phone, tablet or computer. The staff portal (`/admin`) works on laptop and desktop screens only.
+
+## What is here
+
+- **Sign in** (`/`): pick parent, teacher or staff.
+- **Parents** (`/parent`): child switcher, today's attendance, fee balance and bill, uploading a bank teller, report card.
+- **Teachers** (`/teacher`): the daily class register. Score entry is next.
+- **Staff** (`/admin`): dashboard with enrolment, attendance by section, fees collected, and bank tellers to confirm.
+
+The screens run on sample data in `src/lib/demo-data.ts` until the Supabase project is connected.
+
+## Database
+
+`supabase/migrations` holds the schema: sessions and terms, classes and subjects, students and guardians, attendance, fee items and invoices, payments with receipts, CA and exam scores, and early-years skill ratings. Every table has row-level security. Parents see only their own children, teachers only the classes they teach, and results stay hidden until office staff publish them. Money is stored in kobo.
+
+`supabase/seed.sql` loads the school, its 15 classes, the 13 fee items from the school's fee bill, the CA1/CA2/Exam split (20/20/60) and the grade bands.
+
+## Running it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm test           # unit tests (grading, money)
+npm run test:db    # applies the schema to a throwaway local Postgres 16 and runs the access-rule tests
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`test:db` needs Postgres 16 installed locally; it does not touch any hosted database.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16 (App Router), React 19, Tailwind CSS 4, Supabase (Postgres, auth, storage), Vitest.
