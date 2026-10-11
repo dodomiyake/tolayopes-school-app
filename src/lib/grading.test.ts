@@ -1,0 +1,59 @@
+import { describe, expect, it } from "vitest";
+import { average, gradeFor, ordinal, positions } from "./grading";
+import { formatNaira, formatNairaShort, paidPercent } from "./money";
+
+describe("gradeFor", () => {
+  it("maps totals onto the default bands", () => {
+    expect(gradeFor(100).grade).toBe("A");
+    expect(gradeFor(75).grade).toBe("A");
+    expect(gradeFor(74.5).grade).toBe("B");
+    expect(gradeFor(55).grade).toBe("C");
+    expect(gradeFor(0).grade).toBe("E");
+  });
+
+  it("refuses a total no band covers", () => {
+    expect(() => gradeFor(101)).toThrow();
+  });
+});
+
+describe("positions", () => {
+  it("gives tied scores the same place and skips the next", () => {
+    const p = positions([
+      { id: "a", score: 80 },
+      { id: "b", score: 90 },
+      { id: "c", score: 85 },
+      { id: "d", score: 85 },
+    ]);
+    expect([p.get("b"), p.get("c"), p.get("d"), p.get("a")]).toEqual([1, 2, 2, 4]);
+  });
+});
+
+describe("ordinal", () => {
+  it("handles the teens", () => {
+    expect([1, 2, 3, 4, 11, 12, 13, 21, 22, 32].map(ordinal)).toEqual([
+      "1st", "2nd", "3rd", "4th", "11th", "12th", "13th", "21st", "22nd", "32nd",
+    ]);
+  });
+});
+
+describe("average", () => {
+  it("rounds to one decimal place", () => {
+    expect(average([78, 87, 75])).toBe(80);
+    expect(average([70, 71, 71])).toBe(70.7);
+    expect(average([])).toBe(0);
+  });
+});
+
+describe("money", () => {
+  it("formats kobo as naira", () => {
+    expect(formatNaira(8_500_000)).toBe("₦85,000");
+    expect(formatNairaShort(3_120_000_000)).toBe("₦31.2m");
+    expect(formatNairaShort(85_000_000)).toBe("₦850k");
+  });
+
+  it("caps the paid share at 100%", () => {
+    expect(paidPercent(12_000_000, 7_500_000)).toBe(63);
+    expect(paidPercent(100, 500)).toBe(100);
+    expect(paidPercent(0, 0)).toBe(100);
+  });
+});
