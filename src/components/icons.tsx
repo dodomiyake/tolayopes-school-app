@@ -51,3 +51,6 @@ export const ListIcon = (p: P) => (
 export const MonitorIcon = (p: P) => (
   <Icon {...p}><rect x="2" y="4" width="20" height="13" rx="2" /><path d="M8 21h8M12 17v4" /></Icon>
 );
+export const CalendarIcon = (p: P) => (
+  <Icon {...p}><rect x="3" y="4.5" width="18" height="16" rx="2.5" /><path d="M3 9.5h18M8 2.5v4M16 2.5v4" /></Icon>
+);

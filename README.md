@@ -1,13 +1,14 @@
 # Tolayope's Group of School app
 
-School app for Tolayope's Group of School, Abule Egba, Lagos. It serves parents, teachers and office staff, from Creche through SS 3.
+School app for Tolayope's Group of School, Abule Egba, Lagos. It serves parents, students, teachers and office staff, from Creche through SS 3.
 
-Parents and teachers can use it on a phone, tablet or computer. The staff portal (`/admin`) works on laptop and desktop screens only.
+Parents, students and teachers can use it on a phone, tablet or computer. The staff portal (`/admin`) works on laptop and desktop screens only.
 
 ## What is here
 
-- **Sign in** (`/`): pick parent, teacher or staff.
+- **Sign in** (`/`): pick parent, student, teacher or staff. Students use their admission number and a PIN.
 - **Parents** (`/parent`): child switcher, today's attendance, fee balance and bill, uploading a bank teller, report card.
+- **Students** (`/student`): today's classes, attendance, notices, the weekly timetable and their report card.
 - **Teachers** (`/teacher`): the daily class register, and CA and exam score entry with live totals and grades.
 - **Staff** (`/admin`): dashboard; students list with search and enrolment; attendance by class with reminders; fees and receipts; results with publishing to parents; classes and subjects; school settings.
 

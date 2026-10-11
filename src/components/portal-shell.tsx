@@ -8,7 +8,7 @@ import { school } from "@/lib/school";
 
 export type NavItem = { href: string; label: string; icon: ReactNode };
 
-// Shared frame for the parent and teacher portals: a green header with the crest,
+// Shared frame for the parent, student and teacher portals: a green header with the crest,
 // inline navigation from tablet width up, and a bottom tab bar on phones.
 export function PortalShell({
   nav,

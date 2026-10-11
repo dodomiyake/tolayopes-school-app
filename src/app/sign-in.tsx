@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { MonitorIcon } from "@/components/icons";
 
-type Role = "parent" | "teacher" | "staff";
+type Role = "parent" | "student" | "teacher" | "staff";
 
 const roles: { id: Role; label: string; href: string }[] = [
   { id: "parent", label: "Parent", href: "/parent" },
+  { id: "student", label: "Student", href: "/student" },
   { id: "teacher", label: "Teacher", href: "/teacher" },
   { id: "staff", label: "Staff", href: "/admin" },
 ];
@@ -22,7 +23,7 @@ export function SignIn() {
     <div className="flex flex-col gap-5">
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 text-sm font-semibold text-muted">I am a</legend>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {roles.map((r) => (
             <button
               key={r.id}
@@ -70,6 +71,30 @@ export function SignIn() {
             </label>
           </div>
         </>
+      ) : role === "student" ? (
+        // Many pupils have no phone of their own, so students sign in with the admission number and a PIN from the school.
+        <div className="flex flex-col gap-4">
+          <label className="flex flex-col gap-2 text-sm font-semibold text-muted">
+            Admission number
+            <input
+              autoComplete="username"
+              autoCapitalize="characters"
+              placeholder="TGS/26/0110"
+              className="h-13 rounded-xl border-[1.5px] border-line-strong bg-white px-3.5 text-base font-normal text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-2 text-sm font-semibold text-muted">
+            PIN
+            <input
+              type="password"
+              inputMode="numeric"
+              autoComplete="current-password"
+              maxLength={6}
+              className="h-13 rounded-xl border-[1.5px] border-line-strong bg-white px-3.5 text-base font-normal text-ink"
+            />
+            <span className="text-xs font-normal">Your class teacher gives you your PIN.</span>
+          </label>
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
           <label htmlFor="phone" className="text-sm font-semibold text-muted">
@@ -96,7 +121,7 @@ export function SignIn() {
           isStaff ? "hidden lg:flex" : "flex"
         }`}
       >
-        {isStaff ? "Sign in to staff portal" : "Send code"}
+        {isStaff ? "Sign in to staff portal" : role === "student" ? "Sign in" : "Send code"}
       </Link>
     </div>
   );
