@@ -267,3 +267,75 @@ export const demoSettings = {
   accountName: "",
   accountNumber: "",
 };
+
+// The student portal shows Ayomide Adebayo (JSS 2B), who also appears in the parent portal.
+export const demoStudent = {
+  firstName: "Ayomide",
+  lastName: "Adebayo",
+  className: "JSS 2B",
+  admissionNo: "TGS/26/0110",
+  classTeacher: "Mr. Bello",
+  presentDays: 43,
+  schoolDays: 44,
+  markedAt: "7:40 am",
+};
+
+export const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] as const;
+
+export type Period = { start: string; end: string; subject: string; teacher?: string };
+
+const p = (start: string, end: string, subject: string, teacher?: string): Period => ({ start, end, subject, teacher });
+const breaks = { short: p("10:00", "10:20", "Short break"), long: p("12:20", "1:00", "Lunch break") };
+
+export const demoTimetable: Record<(typeof weekdays)[number], Period[]> = {
+  Monday: [
+    p("8:00", "8:40", "Mathematics", "Mr. Bello"), p("8:40", "9:20", "English Language", "Mrs. Nwachukwu"),
+    p("9:20", "10:00", "Basic Science", "Mrs. Oladipo"), breaks.short, p("10:20", "11:00", "Civic Education", "Mrs. Lawal"),
+    p("11:00", "11:40", "Yoruba", "Mr. Adeyemi"), p("11:40", "12:20", "Computer Studies", "Mr. Eze"), breaks.long,
+    p("1:00", "1:40", "Agricultural Science", "Mr. Ojo"), p("1:40", "2:20", "Business Studies", "Mr. Ojo"),
+  ],
+  Tuesday: [
+    p("8:00", "8:40", "English Language", "Mrs. Nwachukwu"), p("8:40", "9:20", "Mathematics", "Mr. Bello"),
+    p("9:20", "10:00", "Business Studies", "Mr. Ojo"), breaks.short, p("10:20", "11:00", "Basic Science", "Mrs. Oladipo"),
+    p("11:00", "11:40", "Agricultural Science", "Mr. Ojo"), p("11:40", "12:20", "Civic Education", "Mrs. Lawal"), breaks.long,
+    p("1:00", "2:20", "Sports", "Mr. Danladi"),
+  ],
+  Wednesday: [
+    p("8:00", "8:40", "Mathematics", "Mr. Bello"), p("8:40", "9:20", "Computer Studies", "Mr. Eze"),
+    p("9:20", "10:00", "English Language", "Mrs. Nwachukwu"), breaks.short, p("10:20", "11:00", "Yoruba", "Mr. Adeyemi"),
+    p("11:00", "11:40", "Basic Science", "Mrs. Oladipo"), p("11:40", "12:20", "Business Studies", "Mr. Ojo"), breaks.long,
+    p("1:00", "1:40", "Civic Education", "Mrs. Lawal"), p("1:40", "2:20", "Library", "Mrs. Lawal"),
+  ],
+  Thursday: [
+    p("8:00", "8:40", "Basic Science", "Mrs. Oladipo"), p("8:40", "9:20", "Mathematics", "Mr. Bello"),
+    p("9:20", "10:00", "Yoruba", "Mr. Adeyemi"), breaks.short, p("10:20", "11:00", "English Language", "Mrs. Nwachukwu"),
+    p("11:00", "11:40", "Agricultural Science", "Mr. Ojo"), p("11:40", "12:20", "Computer Studies", "Mr. Eze"), breaks.long,
+    p("1:00", "2:20", "Clubs and societies"),
+  ],
+  Friday: [
+    p("8:00", "8:40", "Assembly and devotion"), p("8:40", "9:20", "Mathematics", "Mr. Bello"),
+    p("9:20", "10:00", "English Language", "Mrs. Nwachukwu"), breaks.short, p("10:20", "11:00", "Business Studies", "Mr. Ojo"),
+    p("11:00", "11:40", "Basic Science", "Mrs. Oladipo"), p("11:40", "12:20", "Civic Education", "Mrs. Lawal"),
+    p("12:20", "12:30", "Early close for the weekend"),
+  ],
+};
+
+export const demoStudentReport = {
+  term: "3rd term, 2025/2026 session",
+  present: 61,
+  schoolDays: 62,
+  position: 2,
+  classSize: 28,
+  rows: [
+    { subject: "English Language", ca1: 18, ca2: 17, exam: 51 },
+    { subject: "Mathematics", ca1: 19, ca2: 18, exam: 55 },
+    { subject: "Basic Science", ca1: 17, ca2: 17, exam: 50 },
+    { subject: "Business Studies", ca1: 16, ca2: 18, exam: 47 },
+    { subject: "Civic Education", ca1: 18, ca2: 16, exam: 49 },
+    { subject: "Computer Studies", ca1: 19, ca2: 19, exam: 52 },
+    { subject: "Yoruba", ca1: 15, ca2: 16, exam: 43 },
+    { subject: "Agricultural Science", ca1: 17, ca2: 18, exam: 48 },
+  ] satisfies ReportRow[],
+  classTeacherComment: "Ayomide leads by example and helps classmates with Mathematics. Keep it up.",
+  headComment: "An excellent result. Promoted to JSS 3.",
+};
