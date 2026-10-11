@@ -17,3 +17,11 @@ export function paidPercent(billedKobo: number, paidKobo: number): number {
   if (billedKobo <= 0) return 100;
   return Math.min(100, Math.round((paidKobo / billedKobo) * 100));
 }
+
+// Reads an amount a parent typed ("45,000", "₦45000", "45000.50") into kobo. Returns null if it isn't a positive amount.
+export function parseNairaToKobo(input: string): number | null {
+  const cleaned = input.replace(/[₦,\s]/g, "");
+  if (!/^\d+(\.\d{1,2})?$/.test(cleaned)) return null;
+  const kobo = Math.round(Number(cleaned) * 100);
+  return kobo > 0 ? kobo : null;
+}
