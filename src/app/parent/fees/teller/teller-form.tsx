@@ -18,13 +18,19 @@ function today() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+// Keyed by child so switching child starts a fresh form: no amount or photo carries over.
 export function TellerForm() {
+  const { child } = useChild();
+  return <ChildTellerForm key={child.id} />;
+}
+
+function ChildTellerForm() {
   const { child, addTeller } = useChild();
   const balance = child.bill.reduce((s, l) => s + l.amountKobo - l.paidKobo, 0);
   const [amount, setAmount] = useState(balance > 0 ? (balance / 100).toLocaleString("en-NG") : "");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [sentFor, setSentFor] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
   const dateRef = useRef<HTMLInputElement>(null);
 
   // Today's date depends on the parent's device, so it is filled in after the page loads.
@@ -33,7 +39,7 @@ export function TellerForm() {
     if (!input) return;
     input.max = today();
     if (!input.value) input.value = today();
-  }, [sentFor]);
+  }, [sent]);
 
   // Free the last preview when the page closes.
   useEffect(() => () => void (preview && URL.revokeObjectURL(preview)), [preview]);
@@ -55,10 +61,10 @@ export function TellerForm() {
       reference: String(form.get("reference") ?? ""),
       fileName: file.name,
     });
-    setSentFor(child.id);
+    setSent(true);
   }
 
-  if (sentFor === child.id) {
+  if (sent) {
     return (
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-line bg-white p-5 md:max-w-xl">
         <span className="rounded-full bg-lime-100 px-3 py-1 text-xs font-bold text-brand">Teller sent</span>
