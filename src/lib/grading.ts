@@ -36,3 +36,12 @@ export function ordinal(n: number): string {
   if (tens >= 11 && tens <= 13) return `${n}th`;
   return `${n}${({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[n % 10] ?? "th"}`;
 }
+
+// Checks one typed score against its maximum. Blank is allowed (not yet entered).
+export function scoreError(value: string, max: number): string | null {
+  const v = value.trim();
+  if (v === "") return null;
+  if (!/^\d+(\.5)?$/.test(v)) return "Use a whole number or .5";
+  if (Number(v) > max) return `Max is ${max}`;
+  return null;
+}

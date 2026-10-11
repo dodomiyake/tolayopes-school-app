@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// Only the dashboard exists so far; the rest of the MVP admin screens follow.
+// Items marked soon are later MVP screens.
 const items = [
   { href: "/admin", label: "Dashboard" },
-  { href: "/admin/students", label: "Students", soon: true },
+  { href: "/admin/students", label: "Students" },
   { href: "/admin/attendance", label: "Attendance", soon: true },
-  { href: "/admin/fees", label: "Fees and receipts", soon: true },
+  { href: "/admin/fees", label: "Fees and receipts" },
   { href: "/admin/results", label: "Results", soon: true },
   { href: "/admin/classes", label: "Classes and subjects", soon: true },
   { href: "/admin/settings", label: "Settings", soon: true },

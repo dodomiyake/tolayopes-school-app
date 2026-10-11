@@ -8,8 +8,8 @@ Parents and teachers can use it on a phone, tablet or computer. The staff portal
 
 - **Sign in** (`/`): pick parent, teacher or staff.
 - **Parents** (`/parent`): child switcher, today's attendance, fee balance and bill, uploading a bank teller, report card.
-- **Teachers** (`/teacher`): the daily class register. Score entry is next.
-- **Staff** (`/admin`): dashboard with enrolment, attendance by section, fees collected, and bank tellers to confirm.
+- **Teachers** (`/teacher`): the daily class register, and CA and exam score entry with live totals and grades.
+- **Staff** (`/admin`): dashboard; students list with search and enrolment; fees and receipts with tellers to confirm, collection by class and balances owed.
 
 The screens run on sample data in `src/lib/demo-data.ts` until the Supabase project is connected.
 

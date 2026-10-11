@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { average, gradeFor, ordinal, positions } from "./grading";
+import { average, gradeFor, ordinal, positions, scoreError } from "./grading";
 import { formatNaira, formatNairaShort, paidPercent } from "./money";
 
 describe("gradeFor", () => {
@@ -55,5 +55,20 @@ describe("money", () => {
     expect(paidPercent(12_000_000, 7_500_000)).toBe(63);
     expect(paidPercent(100, 500)).toBe(100);
     expect(paidPercent(0, 0)).toBe(100);
+  });
+});
+
+describe("scoreError", () => {
+  it("allows blanks, whole numbers and halves within the maximum", () => {
+    expect(scoreError("", 20)).toBeNull();
+    expect(scoreError("17", 20)).toBeNull();
+    expect(scoreError("12.5", 20)).toBeNull();
+    expect(scoreError("60", 60)).toBeNull();
+  });
+  it("rejects scores above the maximum and anything that is not a score", () => {
+    expect(scoreError("21", 20)).toBe("Max is 20");
+    expect(scoreError("-3", 20)).toBe("Use a whole number or .5");
+    expect(scoreError("abc", 60)).toBe("Use a whole number or .5");
+    expect(scoreError("12.3", 20)).toBe("Use a whole number or .5");
   });
 });
