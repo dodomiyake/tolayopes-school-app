@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { demoAdmin } from "@/lib/demo-data";
+import { demoAdmin, demoClasses } from "@/lib/demo-data";
+
+const sectionNames = ["Creche", "Nursery", "Primary", "Junior secondary", "Senior secondary"] as const;
 import { formatNairaShort, paidPercent } from "@/lib/money";
 import { TellerTable } from "./teller-table";
 
@@ -11,8 +13,14 @@ const card = "rounded-2xl border border-line bg-white p-5";
 export function Dashboard() {
   const [confirmed, setConfirmed] = useState<Set<string>>(new Set());
   const pending = demoAdmin.tellers.filter((t) => !confirmed.has(t.id)).length;
-  const presentTotal = demoAdmin.sections.reduce((s, x) => s + x.present, 0);
-  const enrolledTotal = demoAdmin.sections.reduce((s, x) => s + x.enrolled, 0);
+  const submitted = demoClasses.filter((c) => c.present !== null);
+  const missing = demoClasses.filter((c) => c.present === null).map((c) => c.name);
+  const presentTotal = submitted.reduce((s, c) => s + (c.present ?? 0), 0);
+  const enrolledTotal = submitted.reduce((s, c) => s + c.pupils, 0);
+  const sections = sectionNames.map((name) => {
+    const rows = submitted.filter((c) => c.section === name);
+    return { name, present: rows.reduce((s, c) => s + (c.present ?? 0), 0), enrolled: rows.reduce((s, c) => s + c.pupils, 0) };
+  });
   const collectedPct = paidPercent(demoAdmin.billedKobo, demoAdmin.collectedKobo);
 
   return (
@@ -45,7 +53,7 @@ export function Dashboard() {
           <span className="text-sm font-semibold text-muted">Present today</span>
           <span className="text-3xl font-extrabold">{Math.round((presentTotal / enrolledTotal) * 100)}%</span>
           <span className="text-xs text-muted">
-            {demoAdmin.registersIn} of {demoAdmin.classes} registers submitted
+            {submitted.length} of {demoClasses.length} registers submitted
           </span>
         </div>
         <div className="flex flex-col gap-1.5 rounded-2xl bg-brand p-5">
@@ -70,7 +78,7 @@ export function Dashboard() {
 
         <section className={`${card} flex flex-col gap-3.5`}>
           <h2 className="font-bold">Attendance today by section</h2>
-          {demoAdmin.sections.map((s) => {
+          {sections.map((s) => {
             const pct = Math.round((s.present / s.enrolled) * 100);
             return (
               <div key={s.name} className="flex flex-col gap-1.5">
@@ -87,8 +95,8 @@ export function Dashboard() {
             );
           })}
           <div className="mt-auto rounded-xl border border-sun-300 bg-sun-50 px-3.5 py-3">
-            <p className="text-sm font-bold">{demoAdmin.missingRegisters.length} registers not yet submitted</p>
-            <p className="text-sm text-muted">{demoAdmin.missingRegisters.join(", ")}.</p>
+            <p className="text-sm font-bold">{missing.length} registers not yet submitted</p>
+            <p className="text-sm text-muted">{missing.join(", ")}.</p>
           </div>
         </section>
       </div>

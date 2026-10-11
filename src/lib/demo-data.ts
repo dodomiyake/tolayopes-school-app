@@ -112,7 +112,6 @@ export const demoAdmin = {
   date: "Monday 13 October",
   enrolled: 412,
   classes: 15,
-  registersIn: 12,
   billedKobo: 4_590_000_000,
   collectedKobo: 3_120_000_000,
   tellers: [
@@ -123,14 +122,6 @@ export const demoAdmin = {
     { id: "t5", pupil: "Samuel Ade", className: "Primary 6", amountKobo: 6_000_000, bank: "Zenith Bank" },
     { id: "t6", pupil: "Blessing Udo", className: "Creche", amountKobo: 9_500_000, bank: "First Bank" },
   ] satisfies Teller[],
-  sections: [
-    { name: "Creche", present: 18, enrolled: 20 },
-    { name: "Nursery", present: 54, enrolled: 58 },
-    { name: "Primary", present: 168, enrolled: 176 },
-    { name: "Junior secondary", present: 81, enrolled: 88 },
-    { name: "Senior secondary", present: 63, enrolled: 70 },
-  ],
-  missingRegisters: ["Nursery 2", "JSS 1B", "SS 2A"],
 };
 
 export type ScoreEntry = { ca1: string; ca2: string; exam: string };
@@ -208,3 +199,71 @@ export const demoFeesByClass: { className: string; pupils: number; billedKobo: n
   { className: "JSS 1-3", pupils: 88, billedKobo: 1_144_000_000, collectedKobo: 760_000_000 },
   { className: "SS 1-3", pupils: 70, billedKobo: 769_000_000, collectedKobo: 490_000_000 },
 ];
+
+export type ClassRow = {
+  name: (typeof classNames)[number];
+  section: "Creche" | "Nursery" | "Primary" | "Junior secondary" | "Senior secondary";
+  teacher: string;
+  pupils: number;
+  present: number | null; // null: register not yet submitted today
+  late: number;
+  subjects: { name: string; teacher: string; scores: "not started" | "draft" | "submitted" }[];
+  published: boolean;
+};
+
+const t = (name: string, teacher: string, scores: ClassRow["subjects"][number]["scores"] = "submitted") => ({
+  name,
+  teacher,
+  scores,
+});
+const primarySubjects = (teacher: string, pending: string[] = []) =>
+  ["English Language", "Mathematics", "Basic Science", "Social Studies", "Yoruba", "Verbal Reasoning", "Quantitative Reasoning", "CRS"].map(
+    (s) => t(s, s === "Yoruba" ? "Mr. Adeyemi" : teacher, pending.includes(s) ? "draft" : "submitted"),
+  );
+const secondarySubjects = (pending: string[] = []) =>
+  [
+    ["English Language", "Mrs. Nwachukwu"], ["Mathematics", "Mr. Bello"], ["Basic Science", "Mrs. Oladipo"],
+    ["Business Studies", "Mr. Ojo"], ["Civic Education", "Mrs. Lawal"], ["Computer Studies", "Mr. Eze"],
+    ["Yoruba", "Mr. Adeyemi"], ["Agricultural Science", "Mr. Ojo"],
+  ].map(([s, teacher]) => t(s, teacher, pending.includes(s) ? (s === "Computer Studies" ? "not started" : "draft") : "submitted"));
+
+export const demoClasses: ClassRow[] = [
+  { name: "Creche", section: "Creche", teacher: "Mrs. Afolabi", pupils: 20, present: 18, late: 1, subjects: [t("Skills checklist", "Mrs. Afolabi")], published: false },
+  { name: "Nursery 1", section: "Nursery", teacher: "Mrs. Olayemi", pupils: 30, present: 28, late: 2, subjects: [t("Skills checklist", "Mrs. Olayemi")], published: false },
+  { name: "Nursery 2", section: "Nursery", teacher: "Miss Ibe", pupils: 28, present: null, late: 0, subjects: [t("Skills checklist", "Miss Ibe", "draft")], published: false },
+  { name: "Primary 1", section: "Primary", teacher: "Mrs. Bakare", pupils: 30, present: 29, late: 0, subjects: primarySubjects("Mrs. Bakare"), published: true },
+  { name: "Primary 2", section: "Primary", teacher: "Mrs. Johnson", pupils: 31, present: 30, late: 1, subjects: primarySubjects("Mrs. Johnson"), published: false },
+  { name: "Primary 3", section: "Primary", teacher: "Mr. Akinola", pupils: 29, present: 27, late: 2, subjects: primarySubjects("Mr. Akinola", ["Social Studies"]), published: false },
+  { name: "Primary 4", section: "Primary", teacher: "Mrs. Okafor", pupils: 32, present: 30, late: 1, subjects: primarySubjects("Mrs. Okafor", ["Mathematics", "Basic Science"]), published: false },
+  { name: "Primary 5", section: "Primary", teacher: "Mrs. Danjuma", pupils: 28, present: 27, late: 0, subjects: primarySubjects("Mrs. Danjuma"), published: false },
+  { name: "Primary 6", section: "Primary", teacher: "Mr. Ade", pupils: 26, present: 25, late: 1, subjects: primarySubjects("Mr. Ade"), published: true },
+  { name: "JSS 1", section: "Junior secondary", teacher: "Mrs. Lawal", pupils: 30, present: null, late: 0, subjects: secondarySubjects(["Computer Studies"]), published: false },
+  { name: "JSS 2", section: "Junior secondary", teacher: "Mr. Bello", pupils: 28, present: 27, late: 1, subjects: secondarySubjects(), published: false },
+  { name: "JSS 3", section: "Junior secondary", teacher: "Mr. Ojo", pupils: 30, present: 27, late: 2, subjects: secondarySubjects(["Yoruba"]), published: false },
+  { name: "SS 1", section: "Senior secondary", teacher: "Mrs. Oladipo", pupils: 24, present: 22, late: 1, subjects: secondarySubjects(), published: false },
+  { name: "SS 2", section: "Senior secondary", teacher: "Mr. Eze", pupils: 24, present: null, late: 0, subjects: secondarySubjects(), published: false },
+  { name: "SS 3", section: "Senior secondary", teacher: "Mrs. Nwachukwu", pupils: 22, present: 21, late: 0, subjects: secondarySubjects(), published: false },
+];
+
+// Pupils absent most often this term, for the attendance follow-up list.
+export const demoFrequentAbsence = [
+  { name: "Ibrahim Musa", className: "Primary 4", absent: 6, guardian: "Alhaji Musa", phone: "0809 341 7720" },
+  { name: "Emeka Obi", className: "SS 2", absent: 5, guardian: "Mrs. Obi", phone: "0806 991 2045" },
+  { name: "Ife Ogunleye", className: "Nursery 2", absent: 4, guardian: "Mrs. Ogunleye", phone: "0806 234 9811" },
+  { name: "Tunde Fashola", className: "SS 3", absent: 4, guardian: "Mrs. Fashola", phone: "0708 664 3319" },
+];
+
+export const demoSettings = {
+  name: "Tolayope's Group of School",
+  motto: "Citadel of Divine Success",
+  address: "56 Unity Street, Olota Captain, Abule Egba, Lagos State",
+  phone: "0807 207 7422",
+  session: "2026/2027",
+  term: "1st term",
+  termStart: "2026-09-08",
+  termEnd: "2026-12-12",
+  midTerm: "2026-10-24",
+  bankName: "",
+  accountName: "",
+  accountNumber: "",
+};
